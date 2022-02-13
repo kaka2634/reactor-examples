@@ -11,8 +11,8 @@ import reactor.examples.util.LoggerUtil;
 
 import java.util.concurrent.CountDownLatch;
 
-public class SimpleScheduler {
-    Logger logger = LoggerFactory.getLogger(SimpleScheduler.class);
+public class SchedulerExamples {
+    private static final Logger logger = LoggerFactory.getLogger(SchedulerExamples.class);
 
     @Test
     public void newThread() throws InterruptedException {

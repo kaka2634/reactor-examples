@@ -9,8 +9,8 @@ import reactor.examples.util.LoggerUtil;
 import java.util.Arrays;
 import java.util.List;
 
-public class SimpleCreate {
-    private final static Logger logger = LoggerFactory.getLogger(SimpleCreate.class);
+public class SimpleCreateExamples {
+    private final static Logger logger = LoggerFactory.getLogger(SimpleCreateExamples.class);
 
     @Test
     public void useJust() {
