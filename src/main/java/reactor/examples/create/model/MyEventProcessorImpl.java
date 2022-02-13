@@ -7,7 +7,15 @@ import java.util.concurrent.TimeUnit;
 
 public class MyEventProcessorImpl implements MyEventProcessor {
     private MyEventListener<String> eventListener;
-    private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService executor;
+
+    public MyEventProcessorImpl(){
+        this.executor =  Executors.newSingleThreadScheduledExecutor();
+    }
+
+    public MyEventProcessorImpl(int threadNumber){
+        this.executor =  Executors.newScheduledThreadPool(threadNumber);
+    }
 
     @Override
     public void register(MyEventListener<String> eventListener) {

@@ -10,24 +10,29 @@ import reactor.examples.create.model.MyEventProcessorImpl;
 import reactor.examples.util.LoggerUtil;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class CreateExamples {
-    private final static Logger logger = LoggerFactory.getLogger(CreateExamples.class);
+public class PushExamples {
+    //Flux.push() Asynchronous but single-threaded
 
-    //Flux.create(): Asynchronous and Multi-threaded
+    private final static Logger logger = LoggerFactory.getLogger(PushExamples.class);
 
     @Test
-    public void useCreate() {
-        MyEventProcessor myEventProcessor = new MyEventProcessorImpl(3);
+    public void usePush() throws InterruptedException {
+        MyEventProcessor myEventProcessor = new MyEventProcessorImpl();
 
-        Flux<String> bridge = Flux.create(sink -> {
+        //Use multi-thread pool may lost some values
+        //MyEventProcessor myEventProcessor = new MyEventProcessorImpl(3);
+
+        Flux<String> bridge = Flux.push(sink -> {
             myEventProcessor.register(
                     new MyEventListener<>() {
                         public void onDataChunk(List<String> chunk) {
                             for (String s : chunk) {
                                 sink.next(s);
-                                sleep(500);
                             }
                         }
 
@@ -40,21 +45,12 @@ public class CreateExamples {
         bridge.subscribe(data -> LoggerUtil.logInfo(logger, data));
 
         myEventProcessor.dataChunk("foo", "bar", "bazz");
-        sleep(500);
         myEventProcessor.dataChunk("foo2", "bar2", "bazz2");
-        sleep(500);
         myEventProcessor.dataChunk("foo3", "bar3", "bazz3");
 
-        sleep(2000);
+        TimeUnit.SECONDS.sleep(2);
         myEventProcessor.processComplete();
-    }
 
-    private void sleep(int milliSeconds){
-        try {
-            TimeUnit.MILLISECONDS.sleep(milliSeconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 }
