@@ -83,4 +83,16 @@ public class ErrorExamples {
     private Flux<String> getFromCache(String key){
         return Flux.just(cache.get(key));
     }
+
+
+    /* doOnError: will do something and rethrow error */
+    @Test
+    public void doOnError(){
+        Flux<String> flux = Flux.just("unknown")
+                .flatMap(k -> callExternalService(k)
+                        .doOnError(e -> LoggerUtil.logError(logger, "doOnError by error {} and rethrow error", e.getMessage())));
+
+        flux.subscribe(data -> LoggerUtil.logInfo(logger, data),
+                error -> LoggerUtil.logError(logger, error));
+    }
 }
