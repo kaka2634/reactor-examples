@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.examples.util.LoggerUtil;
 
@@ -64,5 +65,34 @@ public class SubscribeExamples {
 
         ints.subscribe(subscriber);
     }
+
+
+    /* Make sure subscribe correct chain*/
+
+    @Test
+    public void subscribeNotCorrect(){
+        Flux<String> flux= Flux.just("something", "chain");
+        flux.map(secret -> secret.replaceAll(".", "*"));
+        //Only subscribe the just! so it is wrong
+        flux.subscribe(next -> LoggerUtil.logInfo(logger, "Received: " + next));
+    }
+
+    @Test
+    public void subscribeCorrect(){
+        Flux<String> flux= Flux.just("something", "chain");
+        //set result to flux
+        flux = flux.map(secret -> secret.replaceAll(".", "*"));
+        flux.subscribe(next -> LoggerUtil.logInfo(logger, "Received: " + next));
+    }
+
+    @Test
+    public void subscribeBetter(){
+        Disposable secrets = Flux
+                .just("something", "chain")
+                .map(secret -> secret.replaceAll(".", "*"))
+                .subscribe(next -> LoggerUtil.logInfo(logger, "Received: " + next));
+    }
+
+
 
 }
