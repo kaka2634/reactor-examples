@@ -1,11 +1,11 @@
 package reactor.examples.subscribe;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.examples.subscribe.model.SimpleBaseSubscriber;
 import reactor.examples.util.LoggerUtil;
 
 public class SubscribeExamples {
@@ -58,9 +58,12 @@ public class SubscribeExamples {
 
     }
 
+
+
+
     @Test
     public void useBaseSubscriber() {
-        SampleSubscriber<Integer> subscriber = new SampleSubscriber<>();
+        SimpleBaseSubscriber<Integer> subscriber = new SimpleBaseSubscriber<>();
         Flux<Integer> ints = Flux.range(1, 4);
 
         ints.subscribe(subscriber);
