@@ -7,12 +7,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.examples.util.LoggerUtil;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class TransformExamples {
 
@@ -146,6 +143,24 @@ public class TransformExamples {
         mono.subscribe(data -> LoggerUtil.logInfo(logger, data));
     }
 
+
+
+    @Test
+    public void repeat(){
+        //Repeat can use to tranform a Mono to Flux
+        Mono<Integer> mono = Mono.just(1);
+        Flux<Integer> flux = mono.repeat();
+    }
+
+
+    @Test
+    public void repeatWithNumber(){
+        Flux<Integer> flux = Flux.range(1, 4).repeat(3);
+
+        flux.subscribe(data -> LoggerUtil.logInfo(logger, data),
+                error-> LoggerUtil.logError(logger, error),
+                () -> LoggerUtil.logInfo(logger, "COMPLETED"));
+    }
 
 
 }
