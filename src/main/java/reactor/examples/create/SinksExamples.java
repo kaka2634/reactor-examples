@@ -1,4 +1,4 @@
-package reactor.examples.sinks;
+package reactor.examples.create;
 
 import org.junit.Test;
 import org.slf4j.Logger;
